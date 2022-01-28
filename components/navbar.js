@@ -75,7 +75,7 @@ const Header = () => {
           <li className="hover:bg-primaryDark py-2 sm:hover:bg-transparent sm:hover:text-primary">
             <Link href="/">Home</Link>
           </li>
-          <li className="hover:bg-primaryDark py-2 sm:hover:bg-transparent sm:hover:text-primary flex gap-1 items-center">
+          <li className="hover:bg-primaryDark py-2 sm:hover:bg-transparent sm:hover:text-primary flex gap-1 items-center justify-center">
             <ShoppingBagIcon className="h-5 w-5" />
             <Link href="/menu">Menu</Link>
           </li>
