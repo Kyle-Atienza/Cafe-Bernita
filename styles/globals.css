@@ -1,9 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+
+  background: url(../assets/background.png);
+  background-position: center;
+  background-size: cover;
 }
 
 a {
@@ -13,4 +19,49 @@ a {
 
 * {
   box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+.hero,
+#menu-header .background {
+  background: linear-gradient(
+      113.82deg,
+      rgba(138, 67, 0, 0.5) 35.65%,
+      rgba(245, 110, 53, 0.095) 91.49%
+    ),
+    url("../assets/hero-bg.png");
+  background-size: cover;
+  background-position: center;
+}
+
+#card1 {
+  background: url("../assets/card2-img.png");
+  background-position: center 50%;
+  background-size: 140%;
+}
+
+#card1:hover {
+  background-position: center 0%;
+}
+#card2:hover .fa-motorcycle {
+  transform: translateX(50%);
+}
+
+#card2:hover .image {
+  filter: brightness(50%);
+  transform: scale(105%);
+}
+
+#card3 {
+  background: url("../assets/card3-img.png");
+  background-position: center 100%;
+  background-size: 130%;
+}
+
+#card3:hover {
+  background-position: center 0%;
+}
+
+button {
+  transition: all 0.2s ease-in-out;
 }
