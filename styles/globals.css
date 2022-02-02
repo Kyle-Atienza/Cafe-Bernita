@@ -34,14 +34,23 @@ a {
   background-position: center;
 }
 
+#card1,
+#card2,
+#card2 .fa-motorcycle,
+#card3 {
+  transition: all ease-in-out 0.3s;
+}
+
 #card1 {
   background: url("../assets/card2-img.png");
   background-position: center 50%;
   background-size: 140%;
+  transition: all ease-in-out 0.3s;
 }
 
 #card1:hover {
   background-position: center 0%;
+  transition: all ease-in-out 0.3s;
 }
 #card2:hover .fa-motorcycle {
   transform: translateX(50%);

@@ -1,35 +1,142 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
+import { gql, useMutation } from "@apollo/client";
+import { useRouter } from "next/router";
 
 import {
   orderMethodState,
-  orderState,
-  orderItemsSetState
+  orderItemsSetState,
+  orderItemsState
 } from "../../state/orderData";
 
+const CREATE_ORDER = gql`
+  mutation addNewOrder(
+    $name: String!
+    $number: String!
+    $address: String!
+    $message: String!
+    $dateTime: DateTime!
+    $cash: Float
+    $method: Method!
+    $orderItems: [OrderItemCreateInput!]
+    $total: Float
+    $orderItemsCount: Int
+  ) {
+    createOrder(
+      data: {
+        name: $name
+        number: $number
+        address: $address
+        message: $message
+        prefferedDateTime: $dateTime
+        cash: $cash
+        method: $method
+        orderItems: { create: $orderItems }
+        total: $total
+      }
+    ) {
+      id
+      name
+      number
+      address
+      message
+      prefferedDateTime
+      cash
+      method
+      orderItems {
+        name
+        quantity
+        amount
+        variation
+      }
+      total
+    }
+
+    publishManyOrdersConnection(last: 1) {
+      edges {
+        node {
+          id
+        }
+      }
+    }
+
+    publishManyOrderItemsConnection(last: $orderItemsCount) {
+      edges {
+        node {
+          id
+        }
+      }
+    }
+  }
+`;
+
 function CustomerDetails() {
-  const [method] = useRecoilState(orderMethodState);
-  const [orderRecord, setOrderRecord] = useRecoilState(orderState);
-  const [orderItemsSet] = useRecoilState(orderItemsSetState);
+  const [method, setMethod] = useRecoilState(orderMethodState);
+  const [orderItemsSet, setOrderItemsSet] = useRecoilState(orderItemsSetState);
+  const [orderItems, setOrderItems] = useRecoilState(orderItemsState);
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
   const [address, setAddress] = useState("");
   const [message, setMessage] = useState("");
-  const [time, setTime] = useState("");
+  const [dateTime, setDateTime] = useState("");
   const [cash, setCash] = useState("");
+  const router = useRouter();
 
-  const submitOrder = () => {
-    setOrderRecord({
-      name: name,
-      number: number,
-      address: address,
-      message: message,
-      time: time,
-      cash: cash,
-      method: method,
-      items: orderItemsSet
-    });
+  const isImportantFieldsEmpty =
+    name === "" || number === "" || address === "" || dateTime === "";
+
+  const [addNewOrder, { data, loading, error }] = useMutation(CREATE_ORDER);
+
+  const submitOrder = async () => {
+    if (window.confirm("Are you sure about the order?")) {
+      /* addNewOrder({
+        variables: {
+          name: name,
+          number: number,
+          address: address,
+          message: message,
+          dateTime: new Date(dateTime),
+          cash: parseFloat(cash),
+          method: method,
+          orderItems: orderItemsSet.map((orderItem) => {
+            return {
+              name: orderItem.name,
+              quantity: orderItem.quantity,
+              amount: orderItem.amount,
+              variation: orderItem.variation
+            };
+          }),
+          total: orderItemsSet
+            .map((orderItem) => orderItem.amount)
+            .reduce((first, second) => first + second, 0),
+          orderItemsCount: orderItemsSet.length + 1
+        }
+      }); */
+      console.log(`
+      Customer Name: ${name}\n
+      Contact Number: ${number}\n
+      Adress: ${address}\n
+      Message: ${message}\n
+      Preffered date time: ${dateTime}`);
+
+      console.log(
+        orderItemsSet
+          .map((orderItem) => {
+            return `${orderItem.quantity}-${orderItem.name}(${orderItem.variation})\n`;
+          })
+          .join("")
+      );
+
+      setMethod("");
+      setOrderItems([]);
+      document.getElementById("customerDetailsForm").reset();
+
+      // console.log(orderItemsSet, orderItems);
+      router.push("/thanks");
+    }
   };
+
+  error ? console.log(JSON.stringify(error, null, 2)) : null;
 
   return (
     <div className="customer-details mt-5">
@@ -37,6 +144,7 @@ function CustomerDetails() {
         <form
           action=""
           className="gap-5 flex flex-col relative z-20 basis-3/5 lg:mt-0"
+          id="customerDetailsForm"
         >
           <p className="text-xs tracking-widest uppercase">
             Enter your information here
@@ -59,7 +167,7 @@ function CustomerDetails() {
               onInput={(event) => setNumber(event.target.value)}
             />
           </label>
-          {method === "delivery" ? (
+          {method === "Deliver" ? (
             <label htmlFor="name">
               <input
                 required
@@ -90,7 +198,7 @@ function CustomerDetails() {
               type="datetime-local"
               placeholder="Preffered Time*"
               className="mt-2 text-dark w-full bg-transparent py-2 px-4 border-2 border-primary border-solid placeholder:focus:opacity-50 placeholder:text-sm placeholder:uppercase placeholder:text-primary placeholder:tracking-[0.31em]"
-              onInput={(event) => setTime(event.target.value)}
+              onInput={(event) => setDateTime(event.target.value)}
             />
           </label>
           <label htmlFor="name">
@@ -101,13 +209,24 @@ function CustomerDetails() {
               onInput={(event) => setCash(event.target.value)}
             />
           </label>
-          <button
-            className="bg-primary w-fit py-3 px-8 text-white mx-auto  hover:-translate-y-2 hover:shadow-lg hover:shadow-primary/50"
-            type="button"
-            onClick={submitOrder}
-          >
-            Submit
-          </button>
+          {isImportantFieldsEmpty ? (
+            <button
+              disabled
+              className="bg-primary w-fit py-3 px-8 text-white mx-auto  hover:-translate-y-2 hover:shadow-lg hover:shadow-primary/50 disabled:opacity-50"
+              type="button"
+              onClick={submitOrder}
+            >
+              Submit
+            </button>
+          ) : (
+            <button
+              className="bg-primary w-fit py-3 px-8 text-white mx-auto  hover:-translate-y-2 hover:shadow-lg hover:shadow-primary/50"
+              type="button"
+              onClick={submitOrder}
+            >
+              Submit
+            </button>
+          )}
         </form>
       ) : (
         <form
@@ -127,7 +246,17 @@ function CustomerDetails() {
               onInput={(event) => setName(event.target.value)}
             />
           </label>
-          {method === "delivery" ? (
+          <label htmlFor="name">
+            <input
+              disabled
+              required
+              type="tel"
+              placeholder="Phone Number"
+              className="w-full bg-transparent py-2 px-4 border-2 border-primary border-solid placeholder:focus:opacity-50 placeholder:text-sm placeholder:uppercase placeholder:text-primary placeholder:tracking-[0.31em] text-dark disabled:opacity-50"
+              onInput={(event) => setNumber(event.target.value)}
+            />
+          </label>
+          {method === "Deliver" ? (
             <label htmlFor="name">
               <input
                 disabled

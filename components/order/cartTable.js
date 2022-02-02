@@ -42,6 +42,7 @@ function CartTable() {
         .map((orderItem) => orderItem.amount)
         .reduce((first, second) => first + second, 0)
     );
+    console.log(orderItemsSet);
   }, [orderItemsSet]);
 
   return (
@@ -86,7 +87,7 @@ function CartTable() {
       </div>
       {isPathnameOrder ? (
         <button
-          className="bg-primary w-fit py-3 px-8 mt-5 mx-auto hidden lg:block hover:-translate-y-2 hover:shadow-lg hover:shadow-primary/50 text-white"
+          className="bg-primary w-fit py-3 px-8 mt-5 mx-auto block hover:-translate-y-2 hover:shadow-lg hover:shadow-primary/50 text-white"
           onClick={() => router.push("/menu")}
         >
           Order More
@@ -108,19 +109,3 @@ function CartTable() {
 }
 
 export default CartTable;
-
-/* const orderItemsSet = orderSet.map((orderItem) => {
-    const menuItem = menu.find((menuItem) => {
-      return menuItem.id === orderItem;
-    });
-    const menuQty = orderItems.filter(
-      (orderItem) => orderItem === menuItem.id
-      ).length;
-      return {
-        id: menuItem.id,
-        name: menuItem.name.name,
-        variation: menuItem.variation.name,
-        quantity: menuQty,
-        amount: menuItem.price * menuQty
-      };
-    }); */

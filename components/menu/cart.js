@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { useRecoilState } from "recoil";
 
 import { ShoppingBagIcon, CheckIcon, XIcon } from "@heroicons/react/solid";
 
-import { orderItemsState } from "../../state/orderData";
+import { orderItemsState, orderItemsSetState } from "../../state/orderData";
 
 import CartTable from "../order/cartTable";
 
 function Cart() {
   const [orderItems, setOrderItems] = useRecoilState(orderItemsState);
+  const [orderItemsSet, setOrderItemsSet] = useRecoilState(orderItemsSetState);
   const [openCart, setOpenCart] = useState(false);
   const [hoverCart, setHoverCart] = useState(false);
   const router = useRouter();
@@ -49,9 +49,12 @@ function Cart() {
         <h3 className="text-2xl pb-5">Cart</h3>
         <CartTable />
       </div>
+      {orderItemsSet.length === 0}
       <button
         className={
-          hoverCart
+          orderItems.length === 0
+            ? "mobile-cart-btn fixed bg-primary bottom-0 lg:hidden right-0 p-5 m-8 rounded-full ring-offset-2 z-40 translate-y-0 ease-in-out duration-300 pointer-events-none opacity-0"
+            : hoverCart
             ? "mobile-cart-btn fixed bg-primaryDark bottom-0 hover:bg-primaryDark lg:hidden right-0 p-5 m-8 rounded-full ring-offset-2 focus:ring focus:ring-primary z-40 -translate-y-5 shadow-lg shadow-primary ease-in-out duration-300"
             : "mobile-cart-btn fixed bg-primary bottom-0 hover:bg-primaryDark lg:hidden right-0 p-5 m-8 rounded-full ring-offset-2 focus:ring focus:ring-primary z-40 translate-y-0 ease-in-out duration-300"
         }

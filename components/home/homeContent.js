@@ -78,7 +78,7 @@ function HomeContent() {
               <i className="fas fa-motorcycle text-white text-[8rem] mt-auto"></i>
             </div>
             <div
-              className="image absolute w-full h-full top-0 left-0 brightness-75 z-10 hover:scale-110"
+              className="image absolute w-full h-full top-0 left-0 brightness-75 z-10 hover:scale-110 ease-in-out duration-300"
               id="image"
             >
               <Image

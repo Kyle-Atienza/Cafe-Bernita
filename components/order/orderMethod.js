@@ -9,7 +9,6 @@ import pickupIcon from "../../assets/pickup-icon.svg";
 import { orderMethodState } from "../../state/orderData";
 
 function OrderMethod() {
-  // const [method, setMethod] = useState("");
   const [method, setMethod] = useRecoilState(orderMethodState);
 
   return (
@@ -20,11 +19,11 @@ function OrderMethod() {
       <div className="methods flex gap-5">
         <div
           className={
-            method === "delivery"
+            method === "Deliver"
               ? "method flex flex-col shadow-lg shadow-primary/50 ease-in-out duration-300 -translate-y-2 bg-primary"
               : "method flex flex-col bg-white hover:shadow-lg hover:shadow-primary/50 ease-in-out duration-300 hover:-translate-y-2"
           }
-          onClick={() => setMethod("delivery")}
+          onClick={() => setMethod("Deliver")}
         >
           <h3 className="text-2xl font-semibold p-5 ">Deliver</h3>
           <div className="icon relative pr-5">
@@ -33,11 +32,11 @@ function OrderMethod() {
         </div>
         <div
           className={
-            method === "pickup"
+            method === "PickUp"
               ? "method flex flex-col shadow-lg shadow-primary/50 ease-in-out duration-300 -translate-y-2 bg-primary"
               : "method flex flex-col bg-white hover:shadow-lg hover:shadow-primary/50 ease-in-out duration-300 hover:-translate-y-2"
           }
-          onClick={() => setMethod("pickup")}
+          onClick={() => setMethod("PickUp")}
         >
           <h3 className="text-2xl font-semibold p-5">Pickup</h3>
           <div className="icon relative pr-5">

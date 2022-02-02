@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+import { ApolloClient, InMemoryCache, gql, useQuery } from "@apollo/client";
 import { useRecoilState } from "recoil";
 
 import Menu from "../../components/menu/menu";
@@ -8,15 +8,16 @@ import Cart from "../../components/menu/cart";
 import Categories from "../../components/menu/categories";
 
 import { menuState } from "../../state/menuData";
-import { orderItemsState } from "../../state/orderData";
+import { orderItemsState, orderItemsSetState } from "../../state/orderData";
 
 function Index({ categories, foodItems, menuItems }) {
   const [menu, setMenu] = useRecoilState(menuState);
-  const [orderItems, setOrderItems] = useRecoilState(orderItemsState);
 
   useEffect(() => {
     setMenu(menuItems.menuItems);
   }, [menu]);
+
+  console.log(categories);
 
   return (
     <div className="font-lexend mx-5">
