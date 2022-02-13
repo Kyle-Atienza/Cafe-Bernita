@@ -8,8 +8,11 @@ import { RecoilRoot } from "recoil";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 
 const client = new ApolloClient({
-  uri: "https://api-ap-northeast-1.graphcms.com/v2/ckyuwf13k01am01y2bun17ywh/master",
-  cache: new InMemoryCache()
+  uri: process.env.GRAPHCMS_URI,
+  cache: new InMemoryCache(),
+  headers: {
+    authorization: `Bearer ${process.env.GRAPHCMS_TOKEN}`
+  }
 });
 
 function MyApp({ Component, pageProps }) {

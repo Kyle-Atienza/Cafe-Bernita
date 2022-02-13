@@ -5,14 +5,6 @@ import OrderMethod from "../../components/order/orderMethod";
 import CustomerDetails from "../../components/order/customerDetails";
 
 function Index() {
-  /* useEffect(() => {
-    router.pathname === "/order" && orderItemsSet.length === 0
-      ? () => router.push("/menu")
-      : null;
-  }, []); */
-
-  /* console.log(router.pathname === "/order" && orderItemsSet.length === 0); */
-
   return (
     <div className="font-lexend mx-5 relative">
       <div className="relative justify-end " id="menu-header">

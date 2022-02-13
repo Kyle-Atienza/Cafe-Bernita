@@ -114,19 +114,6 @@ function CustomerDetails() {
           orderItemsCount: orderItemsSet.length + 1
         }
       });
-      console.log(`
-      Customer Name: ${name}\n
-      Contact Number: ${number}\n
-      Address: ${address}\n
-      ${orderItemsSet
-        .map((orderItem) => {
-          return `${orderItem.quantity}-${orderItem.name}(${orderItem.variation})\n`;
-        })
-        .join("")}\n
-      Message: ${message}\n
-      Preffered date time: ${dateTime} \n
-      `);
-
       setMethod("");
       setOrderItems([]);
       await router.push("/thanks");

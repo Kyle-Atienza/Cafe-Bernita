@@ -27,7 +27,6 @@ const Header = () => {
     //checks if the store is open
     const time = new Date().getHours();
     time >= 10 && time <= 19 ? setIsStoreOpen(open) : setIsStoreOpen(false);
-    console.log(isStoreOpen);
   }, []);
 
   return (

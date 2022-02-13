@@ -1,6 +1,9 @@
 import React from "react";
+import { useRouter } from "next/router";
 
-function index() {
+function Index() {
+  const router = useRouter();
+
   return (
     <div className="font-lexend mx-5 relative">
       <div className="relative justify-end " id="menu-header">
@@ -14,10 +17,16 @@ function index() {
           Your order is now being prepared
         </p>
         <div className="flex flex-col md:flex-row gap-2 md:gap-5 mt-10 w-1/2">
-          <button className="bg-primary w-full md:w-fit py-3 px-8 block hover:-translate-y-2 hover:shadow-lg hover:shadow-primary/50 text-white ">
+          <button
+            className="bg-primary w-full md:w-fit py-3 px-8 block hover:-translate-y-2 hover:shadow-lg hover:shadow-primary/50 text-white "
+            onClick={() => router.push("/menu")}
+          >
             Order More
           </button>
-          <button className="bg-white w-full md:w-fit py-3 px-8 block hover:-translate-y-2 hover:shadow-lg hover:shadow-primary/50 text-primary ">
+          <button
+            className="bg-white w-full md:w-fit py-3 px-8 block hover:-translate-y-2 hover:shadow-lg hover:shadow-primary/50 text-primary "
+            onClick={() => router.push("/")}
+          >
             Exit to Home
           </button>
         </div>
@@ -26,4 +35,4 @@ function index() {
   );
 }
 
-export default index;
+export default Index;
