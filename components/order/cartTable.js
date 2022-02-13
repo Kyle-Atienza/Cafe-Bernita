@@ -42,7 +42,6 @@ function CartTable() {
         .map((orderItem) => orderItem.amount)
         .reduce((first, second) => first + second, 0)
     );
-    console.log(orderItemsSet);
   }, [orderItemsSet]);
 
   return (

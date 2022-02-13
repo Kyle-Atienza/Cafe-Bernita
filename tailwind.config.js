@@ -9,15 +9,16 @@ module.exports = {
         secondary: "#FFB56F",
         dark: "#403233",
         online: "#2FE837",
+        offline: "#E82F2F"
       },
       fontFamily: {
         lexend: "'Lexend Deca', sans-serif",
-        rozha: "'Rozha One', serif",
+        rozha: "'Rozha One', serif"
       },
       backgroundImage: {
-        card2: "url('/assets/card2-img.png')",
-      },
-    },
+        card2: "url('/assets/card2-img.png')"
+      }
+    }
   },
-  plugins: [],
+  plugins: []
 };

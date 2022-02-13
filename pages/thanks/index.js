@@ -6,7 +6,7 @@ function index() {
       <div className="relative justify-end " id="menu-header">
         <div className="background w-full left-0 h-[30vh] z-10 "></div>
       </div>
-      <div className="container mx-auto mt-40">
+      <div className="container mx-auto mt-40 relative z-50">
         <h1 className="font-bold text-5xl lg:text-7xl text-dark">
           Thank you for ordering from us!
         </h1>

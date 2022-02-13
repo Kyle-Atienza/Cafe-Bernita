@@ -1,3 +1,5 @@
+import { useRouter } from "next/router";
+
 import cafeBernita from "../../assets/cafe-bernita.png";
 import swirl from "../../assets/swirl-1.svg";
 import card2Img from "../../assets/card1-img.png";
@@ -6,6 +8,8 @@ import Image from "next/image";
 import React from "react";
 
 function HomeContent() {
+  const router = useRouter();
+
   return (
     <div className="px-5 mx-auto">
       <div className="hero h-screen p-5 flex justify-center flex-col md:p-28 ">
@@ -13,7 +17,10 @@ function HomeContent() {
           <h1 className="font-rozha text-6xl md:text-8xl text-white h-min md:w-min">
             Taste something different
           </h1>
-          <button className=" bg-primary w-fit py-3 px-8 mt-4  hover:-translate-y-2 hover:shadow-lg hover:shadow-primary/50 text-white">
+          <button
+            className=" bg-primary w-fit py-3 px-8 mt-4  hover:-translate-y-2 hover:shadow-lg hover:shadow-primary/50 text-white"
+            onClick={() => router.push("/menu")}
+          >
             Order Now
           </button>
         </div>
@@ -21,9 +28,12 @@ function HomeContent() {
 
       <article className="content container mx-auto  mt-48">
         <div className="about-us flex relative flex-col h-screen bg-primary lg:flex-row-reverse md:h-[50vh] ">
-          <p className="text-white text-center basis-2/5 grid place-items-center p-5 text-lg md:text-xl lg:place-items-start lg:p-20">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-            Perferendis perspiciatis asperiores commodi ducimus. Aliquid.
+          <p className="text-white text-center basis-2/5 grid place-items-center px-10 text-sm lg:place-items-start lg:px-20 self-center z-30">
+            Cafe Bernita is a family run business which offers variety of
+            homemade dishes that is focused on bringing authentic flavor to the
+            table, our menu is mainly based of mushroom dishes along with
+            traditional filipino cuisines. Cafe bernita is happy to be part of
+            many peoples lives, bringing them happiness through delicous food.
           </p>
           <div className="image h-full relative basis-3/5 overflow-clip lg:overflow-visible">
             <div className="img bottom-0 lg:hidden relative h-full">

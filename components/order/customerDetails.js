@@ -83,13 +83,15 @@ function CustomerDetails() {
   const router = useRouter();
 
   const isImportantFieldsEmpty =
-    name === "" || number === "" || address === "" || dateTime === "";
+    method == "Deliver"
+      ? name === "" || number === "" || address === "" || dateTime === ""
+      : name === "" || number === "" || dateTime === "";
 
   const [addNewOrder, { data, loading, error }] = useMutation(CREATE_ORDER);
 
   const submitOrder = async () => {
     if (window.confirm("Are you sure about the order?")) {
-      /* addNewOrder({
+      await addNewOrder({
         variables: {
           name: name,
           number: number,
@@ -111,28 +113,23 @@ function CustomerDetails() {
             .reduce((first, second) => first + second, 0),
           orderItemsCount: orderItemsSet.length + 1
         }
-      }); */
+      });
       console.log(`
       Customer Name: ${name}\n
       Contact Number: ${number}\n
-      Adress: ${address}\n
+      Address: ${address}\n
+      ${orderItemsSet
+        .map((orderItem) => {
+          return `${orderItem.quantity}-${orderItem.name}(${orderItem.variation})\n`;
+        })
+        .join("")}\n
       Message: ${message}\n
-      Preffered date time: ${dateTime}`);
-
-      console.log(
-        orderItemsSet
-          .map((orderItem) => {
-            return `${orderItem.quantity}-${orderItem.name}(${orderItem.variation})\n`;
-          })
-          .join("")
-      );
+      Preffered date time: ${dateTime} \n
+      `);
 
       setMethod("");
       setOrderItems([]);
-      document.getElementById("customerDetailsForm").reset();
-
-      // console.log(orderItemsSet, orderItems);
-      router.push("/thanks");
+      await router.push("/thanks");
     }
   };
 
@@ -140,11 +137,10 @@ function CustomerDetails() {
 
   return (
     <div className="customer-details mt-5">
-      {method !== "" && orderItemsSet.length > 0 ? (
-        <form
-          action=""
-          className="gap-5 flex flex-col relative z-20 basis-3/5 lg:mt-0"
-          id="customerDetailsForm"
+      <form action="" className="" id="customerDetailsForm">
+        <fieldset
+          disabled={method === "" || orderItems.length == 0 ? true : false}
+          className="gap-5 flex flex-col relative z-20 basis-3/5 lg:mt-0 disabled:opacity-50"
         >
           <p className="text-xs tracking-widest uppercase">
             Enter your information here
@@ -193,7 +189,11 @@ function CustomerDetails() {
             className="uppercase text-sm text-primary tracking-[0.31em]"
           >
             <span className="pl-5 ">Preffered Date & Time</span>
+            <span className="text-[.6rem] tracking-normal normal-case">
+              *we make your order for a minimum of 20 minutes
+            </span>
             <input
+              min="2022-01-30"
               required
               type="datetime-local"
               placeholder="Preffered Time*"
@@ -209,109 +209,16 @@ function CustomerDetails() {
               onInput={(event) => setCash(event.target.value)}
             />
           </label>
-          {isImportantFieldsEmpty ? (
-            <button
-              disabled
-              className="bg-primary w-fit py-3 px-8 text-white mx-auto  hover:-translate-y-2 hover:shadow-lg hover:shadow-primary/50 disabled:opacity-50"
-              type="button"
-              onClick={submitOrder}
-            >
-              Submit
-            </button>
-          ) : (
-            <button
-              className="bg-primary w-fit py-3 px-8 text-white mx-auto  hover:-translate-y-2 hover:shadow-lg hover:shadow-primary/50"
-              type="button"
-              onClick={submitOrder}
-            >
-              Submit
-            </button>
-          )}
-        </form>
-      ) : (
-        <form
-          action=""
-          className="gap-5 flex flex-col relative z-20 basis-3/5 lg:mt-0"
-        >
-          <p className="text-xs tracking-widest uppercase">
-            Enter your information here
-          </p>
-          <label htmlFor="name">
-            <input
-              disabled
-              required
-              type="text"
-              placeholder="Name"
-              className="w-full bg-transparent py-2 px-4 border-2 border-primary border-solid placeholder:focus:opacity-50 placeholder:text-sm placeholder:uppercase placeholder:text-primary placeholder:tracking-[0.31em] text-dark disabled:opacity-50"
-              onInput={(event) => setName(event.target.value)}
-            />
-          </label>
-          <label htmlFor="name">
-            <input
-              disabled
-              required
-              type="tel"
-              placeholder="Phone Number"
-              className="w-full bg-transparent py-2 px-4 border-2 border-primary border-solid placeholder:focus:opacity-50 placeholder:text-sm placeholder:uppercase placeholder:text-primary placeholder:tracking-[0.31em] text-dark disabled:opacity-50"
-              onInput={(event) => setNumber(event.target.value)}
-            />
-          </label>
-          {method === "Deliver" ? (
-            <label htmlFor="name">
-              <input
-                disabled
-                required
-                type="text"
-                placeholder="Address"
-                className="w-full bg-transparent py-2 px-4 border-2 border-primary border-solid placeholder:focus:opacity-50 placeholder:text-sm placeholder:uppercase placeholder:text-primary placeholder:tracking-[0.31em] text-dark disabled:opacity-50"
-                onInput={(event) => setAddress(event.target.value)}
-              />
-            </label>
-          ) : null}
-          <label htmlFor="message">
-            <textarea
-              disabled
-              name="message"
-              id="message"
-              placeholder="Additional Notes*"
-              className="w-full bg-transparent py-2 px-4 border-2 border-primary border-solid placeholder:focus:opacity-50 placeholder:text-sm placeholder:uppercase placeholder:text-primary placeholder:tracking-[0.31em] text-dark disabled:opacity-50"
-              onInput={(event) => setMessage(event.target.value)}
-              rows="5"
-            ></textarea>
-          </label>
-          <label
-            htmlFor="time"
-            className="uppercase text-sm text-primary tracking-[0.31em]"
-          >
-            <span className="pl-5 opacity-50">Preffered Date & Time</span>
-            <input
-              disabled
-              required
-              type="datetime-local"
-              placeholder="Preffered Time*"
-              className="mt-2 text-dark w-full bg-transparent py-2 px-4 border-2 border-primary border-solid placeholder:focus:opacity-50 placeholder:text-sm placeholder:uppercase placeholder:text-primary placeholder:tracking-[0.31em] disabled:opacity-50"
-              onInput={(event) => setTime(event.target.value)}
-            />
-          </label>
-          <label htmlFor="name">
-            <input
-              disabled
-              type="number"
-              placeholder="Cash on hand*"
-              className="w-full bg-transparent py-2 px-4 border-2 border-primary border-solid placeholder:focus:opacity-50 placeholder:text-sm placeholder:uppercase placeholder:text-primary placeholder:tracking-[0.31em] text-dark disabled:opacity-50"
-              onInput={(event) => setCash(event.target.value)}
-            />
-          </label>
           <button
-            disabled
-            className="bg-primary w-fit py-3 px-8 text-white mx-auto  hover:-translate-y-2 hover:shadow-lg hover:shadow-primary/50 disabled:opacity-50"
+            disabled={isImportantFieldsEmpty ? true : false}
+            className="bg-primary w-fit py-3 px-8 text-white mx-auto  hover:-translate-y-2 hover:shadow-lg hover:shadow-primary/50 disabled:opacity-50 disabled:pointer-events-none"
             type="button"
             onClick={submitOrder}
           >
             Submit
           </button>
-        </form>
-      )}
+        </fieldset>
+      </form>
     </div>
   );
 }

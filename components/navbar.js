@@ -7,17 +7,28 @@ import { ShoppingBagIcon } from "@heroicons/react/solid";
 
 const Header = () => {
   const [navLinksState, setNavLinksState] = useState(false);
+  const [isStoreOpen, setIsStoreOpen] = useState(false);
   const router = useRouter();
 
   const isMobile = useMediaQuery({ query: `(max-width: 640px)` });
 
   useEffect(() => {
+    //checks if screen is mobile
+    //forces the navbart to be closed
     !isMobile ? setNavLinksState(true) : setNavLinksState(false);
   }, [isMobile]);
 
   useEffect(() => {
+    //closes the navbar whenever the route changes
     setNavLinksState(false);
   }, [router]);
+
+  useEffect(() => {
+    //checks if the store is open
+    const time = new Date().getHours();
+    time >= 10 && time <= 19 ? setIsStoreOpen(open) : setIsStoreOpen(false);
+    console.log(isStoreOpen);
+  }, []);
 
   return (
     <nav className="container p-5 flex mx-auto justify-center relative z-30 font-lexend">
@@ -30,11 +41,21 @@ const Header = () => {
         onClick={() => setNavLinksState(false)}
       ></div>
       <div className="operating-status hidden sm:flex flex-1 items-center gap-3  uppercase text-xs tracking-widest">
-        <div className="status-indicator w-4 aspect-square rounded-full bg-online h-min my-auto hidden sm:block"></div>
-        Open
+        <div
+          className={
+            "status-indicator w-4 aspect-square rounded-full h-min my-auto hidden sm:block " +
+            (isStoreOpen ? "bg-online" : "bg-offline")
+          }
+        ></div>
+        {isStoreOpen ? "Open" : "Close"}
       </div>
       <div className="brand flex gap-2 items-center">
-        <div className="status-indicator w-4 aspect-square rounded-full bg-online h-min my-auto sm:hidden"></div>
+        <div
+          className={
+            "status-indicator w-4 aspect-square rounded-full h-min my-auto sm:hidden " +
+            (isStoreOpen ? "bg-online" : "bg-offline")
+          }
+        ></div>
         <h1 className="font-semibold text-2xl md:text-4xl lg:text-5xl">
           Cafe Bernita
         </h1>
@@ -63,9 +84,8 @@ const Header = () => {
       </button>
       <div
         className={
-          navLinksState
-            ? "nav-links absolute w-full h-40 sm:h-auto overflow-hidden top-full sm:relative sm:flex-1 sm:w-auto px-5 ease-in-out duration-300"
-            : "nav-links absolute w-full h-0 sm:h-auto overflow-hidden top-full sm:relative sm:flex-1 sm:w-auto px-5 ease-in-out duration-300"
+          "nav-links absolute w-full h-40 sm:h-auto overflow-hidden top-full sm:relative sm:flex-1 sm:w-auto px-5 ease-in-out duration-300 " +
+          (navLinksState ? "h-40" : "h-0")
         }
       >
         <ul

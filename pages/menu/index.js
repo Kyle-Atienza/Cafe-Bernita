@@ -17,8 +17,6 @@ function Index({ categories, foodItems, menuItems }) {
     setMenu(menuItems.menuItems);
   }, [menu]);
 
-  console.log(categories);
-
   return (
     <div className="font-lexend mx-5">
       <div className="relative justify-end " id="menu-header">
