@@ -1,12 +1,52 @@
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { gql, useMutation } from "@apollo/client";
 
 import swirl from "../../assets/swirl-2.svg";
 
 import React from "react";
 import Image from "next/image";
 
+const CREATE_MESSAGE = gql`
+  mutation addMessage($name: String!, $email: String!, $message: String!) {
+    createContactMessage(
+      data: { name: $name, email: $email, message: $message }
+    ) {
+      name
+      email
+      message
+    }
+    publishManyContactMessagesConnection(last: 1) {
+      edges {
+        node {
+          id
+        }
+      }
+    }
+  }
+`;
+
 function Contact() {
   const router = useRouter();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const [addNewOrder, { data, loading, error }] = useMutation(CREATE_MESSAGE);
+
+  const submitMessage = async (event) => {
+    event.preventDefault();
+    await addNewOrder({
+      variables: {
+        name: name,
+        email: email,
+        message: message
+      }
+    });
+    error
+      ? console.log(JSON.stringify(error, null, 2))
+      : window.alert("We have recieved your message. Thank you");
+  };
 
   return (
     <div className="container px-5 mt-40 mx-auto flex flex-col lg:flex-row lg:items-start">
@@ -34,29 +74,42 @@ function Contact() {
           </div>
         </div>
       </div>
-      <form
-        action="https://formsubmit.co/kylefrancisedison@gmail.com"
-        className="mt-10 gap-5 flex flex-col relative z-20 basis-3/5 lg:mt-0"
-        method="POST"
-      >
+      <form className="mt-10 gap-5 flex flex-col relative z-20 basis-3/5 lg:mt-0">
         <label htmlFor="name">
           <input
+            required
             id="name"
             type="text"
             placeholder="Name"
+            onInput={(event) => setName(event.target.value)}
+            className="w-full bg-transparent py-2 px-4 border-2 border-primary border-solid placeholder:focus:opacity-50 placeholder:text-sm placeholder:uppercase placeholder:text-primary placeholder:tracking-[0.31em]"
+          />
+        </label>
+        <label htmlFor="email">
+          <input
+            required
+            id="email"
+            type="email"
+            placeholder="Email"
+            onInput={(event) => setEmail(event.target.value)}
             className="w-full bg-transparent py-2 px-4 border-2 border-primary border-solid placeholder:focus:opacity-50 placeholder:text-sm placeholder:uppercase placeholder:text-primary placeholder:tracking-[0.31em]"
           />
         </label>
         <label htmlFor="message">
           <textarea
+            required
             name="message"
             id="message"
             placeholder="Message"
+            onInput={(event) => setMessage(event.target.value)}
             className="w-full bg-transparent py-2 px-4 border-2 border-primary border-solid placeholder:focus:opacity-30opacity-50 placeholder:text-sm placeholder:uppercase placeholder:text-primary placeholder:tracking-[0.31em]"
             rows="8"
           ></textarea>
         </label>
-        <button className="bg-primary w-fit py-3 px-8 mt-4 text-white mx-auto  hover:-translate-y-2 hover:shadow-lg hover:shadow-primary/50">
+        <button
+          onClick={(event) => submitMessage(event)}
+          className="bg-primary w-fit py-3 px-8 mt-4 text-white mx-auto  hover:-translate-y-2 hover:shadow-lg hover:shadow-primary/50"
+        >
           Submit
         </button>
       </form>
